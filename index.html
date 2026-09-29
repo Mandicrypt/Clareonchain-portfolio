@@ -238,9 +238,76 @@
 
   /* ---------- Hero ---------- */
   .hero{
-    padding:140px 0 100px;
+    padding:140px 0 0;
     position:relative;
     z-index:2;
+    overflow:hidden;
+  }
+  .hero-glow{
+    position:absolute;
+    top:-20%; right:-10%;
+    width:640px; height:640px;
+    background:radial-gradient(circle, color-mix(in srgb, var(--accent) 30%, transparent) 0%, transparent 70%);
+    pointer-events:none;
+    z-index:0;
+  }
+  .hero-grid{
+    position:relative;
+    z-index:1;
+    display:grid;
+    grid-template-columns:1.15fr 0.85fr;
+    align-items:end;
+    gap:40px;
+  }
+  .hero-portrait{
+    aspect-ratio:3/4;
+    border-radius:6px 6px 0 0;
+    overflow:hidden;
+    border:1px solid var(--border);
+    border-bottom:none;
+  }
+  .hero-portrait img{
+    width:100%;
+    height:112%;
+    object-fit:cover;
+    display:block;
+    will-change:transform;
+  }
+  @media (max-width:820px){
+    .hero-grid{grid-template-columns:1fr; gap:32px;}
+    .hero-portrait{order:-1; max-width:280px; margin:0 auto; border-radius:6px; border-bottom:1px solid var(--border);}
+    .hero-portrait img{height:100%;}
+  }
+
+  /* ---------- Coverage ticker ---------- */
+  .ticker{
+    border-top:1px solid var(--border);
+    border-bottom:1px solid var(--border);
+    overflow:hidden;
+    margin-top:56px;
+    position:relative;
+    z-index:2;
+  }
+  .ticker-track{
+    display:flex;
+    width:max-content;
+    animation:tickerScroll 22s linear infinite;
+  }
+  .ticker-item{
+    font-family:var(--font-head);
+    font-size:18px;
+    font-weight:500;
+    color:var(--muted);
+    padding:18px 36px;
+    white-space:nowrap;
+    border-right:1px solid var(--border);
+  }
+  @keyframes tickerScroll{
+    from{ transform:translateX(0); }
+    to{ transform:translateX(-50%); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .ticker-track{ animation:none; }
   }
   .hero-name{
     font-size:clamp(72px, 13vw, 168px);
@@ -326,8 +393,22 @@
     min-height:280px;
     display:flex;
     flex-direction:column;
+    position:relative;
     transition:opacity 0.15s ease;
   }
+  .piece::before{
+    content:"";
+    position:absolute;
+    top:-1px; left:0;
+    width:0%; height:2px;
+    background:var(--accent);
+    transition:width 0.35s ease;
+  }
+  .piece:hover::before{ width:100%; }
+  .piece:nth-child(1){ transition-delay:0s; }
+  .piece:nth-child(2){ transition-delay:0.08s; }
+  .piece:nth-child(3){ transition-delay:0.16s; }
+  .piece:nth-child(4){ transition-delay:0.24s; }
   .piece:nth-child(even){
     padding-left:32px;
     padding-right:0;
@@ -396,16 +477,23 @@
     aspect-ratio:4/5;
     border-radius:4px;
     border:1px solid var(--border);
-    background:
-      linear-gradient(160deg, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
-      var(--surface);
     position:relative;
+    overflow:hidden;
+  }
+  .about-photo img{
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    display:block;
   }
   .about-photo-caption{
     position:absolute;
     left:16px; bottom:16px;
-    color:var(--muted);
+    color:var(--white, #F5F5F5);
     font-size:12px;
+    padding:4px 8px;
+    background:rgba(0,0,0,0.45);
+    border-radius:3px;
   }
   .pull{
     font-family:var(--font-head);
@@ -556,20 +644,36 @@
 <main id="top">
 
   <!-- Hero -->
-  <section class="hero wrap">
-    <h1 class="hero-name">Clare</h1>
-    <div class="hero-sub">
-      <div>
-        <p class="hero-role reveal">Writer &amp; Web3 Researcher</p>
-        <a href="#writing" class="hero-cta reveal">Read the work</a>
+  <section class="hero">
+    <div class="hero-glow" aria-hidden="true"></div>
+    <div class="hero-grid wrap">
+      <div class="hero-text">
+        <h1 class="hero-name">Clare</h1>
+        <div class="hero-sub">
+          <div>
+            <p class="hero-role reveal">Writer &amp; Web3 Researcher</p>
+            <a href="#writing" class="hero-cta reveal">Read the work</a>
+          </div>
+          <p class="hero-intro reveal">Research-driven writing on Web3, technology and the ideas shaping the digital economy — built to be read, not skimmed.</p>
+        </div>
       </div>
-      <p class="hero-intro reveal">Research-driven writing on Web3, technology and the ideas shaping the digital economy, built to be read, not skimmed.</p>
+      <div class="hero-portrait">
+        <img src="clare-photo.jpg" id="heroPortrait" alt="Clare — illustrated portrait">
+      </div>
     </div>
   </section>
 
+  <!-- Coverage ticker -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span class="ticker-item">Web3</span><span class="ticker-item">Crypto</span><span class="ticker-item">Research</span><span class="ticker-item">Technology</span><span class="ticker-item">Campaigns</span>
+      <span class="ticker-item">Web3</span><span class="ticker-item">Crypto</span><span class="ticker-item">Research</span><span class="ticker-item">Technology</span><span class="ticker-item">Campaigns</span>
+    </div>
+  </div>
+
   <!-- Approach statement -->
   <section class="wrap approach">
-    <p class="approach-text reveal">Good writing doesn't make complex things sound complicated; it finds the signal, understands the system, and makes the reader want to keep going.</p>
+    <p class="approach-text reveal">Good writing doesn't make complex things sound complicated — it finds the signal, understands the system, and makes the reader want to keep going.</p>
   </section>
 
   <!-- Selected Writing -->
@@ -624,7 +728,10 @@
       <h2>About</h2>
     </div>
     <div class="about-grid reveal">
-      <div class="about-photo"><span class="about-photo-caption">Clare, writer — photo pending</span></div>
+      <div class="about-photo">
+        <img src="clare-photo.jpg" alt="Clare — illustrated portrait">
+        <span class="about-photo-caption">Clare</span>
+      </div>
       <div>
         <p class="pull">Start from what's verifiable. Write it plainly. Cut anything that doesn't earn its place.</p>
         <div class="about-copy">
@@ -677,7 +784,7 @@
       <div class="contact-links">
         <a href="mailto:clareonchain@gmail.com">clareonchain@gmail.com</a>
         <a href="https://medium.com/@techyclare" target="_blank" rel="noopener">Medium</a>
-        <a href="https://x.com/clareonchain">X / Twitter</a>
+        <a href="https://x.com/clareonchain" target="_blank" rel="noopener">X / Twitter</a>
       </div>
     </div>
   </section>
@@ -718,6 +825,19 @@
   });
   indexNav.querySelectorAll('a').forEach(a => a.addEventListener('click', closeNav));
   document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeNav(); });
+
+  // Hero portrait parallax
+  const heroPortrait = document.getElementById('heroPortrait');
+  const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  if (heroPortrait && !prefersReducedMotion){
+    function updateParallax(){
+      const rect = heroPortrait.parentElement.getBoundingClientRect();
+      const offset = rect.top * -0.08;
+      heroPortrait.style.transform = `translateY(${offset}px)`;
+    }
+    window.addEventListener('scroll', updateParallax, { passive: true });
+    updateParallax();
+  }
 
   // Reading progress bar
   const progressBar = document.getElementById('progressBar');
