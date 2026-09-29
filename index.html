@@ -14,7 +14,7 @@
     --font-body:'Inter', sans-serif;
     --max-width: 1200px;
     --read-width: 620px;
-    --accent:#3B6FFF;
+    --accent:#38BDF8;
   }
   html[data-theme="dark"]{
     --bg:#0A0A0A;
@@ -246,6 +246,16 @@
     font-size:clamp(72px, 13vw, 168px);
     line-height:0.9;
     letter-spacing:-0.03em;
+    color:var(--accent);
+    opacity:0;
+    transform:translateY(24px);
+    animation:heroIn 0.9s cubic-bezier(0.16,1,0.3,1) forwards;
+  }
+  @keyframes heroIn{
+    to{ opacity:1; transform:translateY(0); }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .hero-name{ animation:none; opacity:1; transform:none; }
   }
   .hero-sub{
     display:flex;
@@ -291,55 +301,79 @@
     .hero-sub{flex-direction:column; align-items:flex-start;}
   }
 
-  /* ---------- Selected Writing (indexed list) ---------- */
-  .writing-list{
-    display:flex;
-    flex-direction:column;
+  /* ---------- Approach statement ---------- */
+  .approach{
+    padding:80px 0 96px;
+  }
+  .approach-text{
+    font-family:var(--font-head);
+    font-size:clamp(28px, 4vw, 46px);
+    line-height:1.25;
+    font-weight:500;
+    max-width:20ch;
+    letter-spacing:-0.01em;
+  }
+
+  /* ---------- Selected Writing (asymmetric grid) ---------- */
+  .writing-grid{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    border-top:1px solid var(--border);
   }
   .piece{
-    display:grid;
-    grid-template-columns:64px 1fr 140px;
-    gap:32px;
-    align-items:baseline;
-    padding:30px 12px;
-    margin:0 -12px;
-    border-top:1px solid var(--border);
-    border-radius:2px;
-    transition:background 0.2s ease;
+    padding:36px 32px 40px 0;
+    border-bottom:1px solid var(--border);
+    min-height:280px;
+    display:flex;
+    flex-direction:column;
+    transition:opacity 0.15s ease;
   }
-  .piece:hover{
-    background:var(--surface);
+  .piece:nth-child(even){
+    padding-left:32px;
+    padding-right:0;
+    border-left:1px solid var(--border);
   }
+  .piece:nth-child(2){ margin-top:56px; }
+  .piece:nth-child(4){ margin-top:-56px; }
+  .piece:hover{ opacity:0.82; }
   .piece-num{
     font-family:var(--font-head);
     color:var(--muted);
-    font-size:15px;
-    padding-top:6px;
+    font-size:14px;
+    margin-bottom:auto;
+    padding-bottom:48px;
+  }
+  .piece-cat{
+    color:var(--accent);
+    font-size:13px;
+    margin-bottom:6px;
+  }
+  .piece-date{
+    color:var(--muted);
+    font-size:13px;
+    margin-bottom:16px;
   }
   .piece-title{
     font-family:var(--font-head);
-    font-size:24px;
+    font-size:clamp(22px, 2.4vw, 28px);
     font-weight:500;
+    line-height:1.15;
+    max-width:34ch;
+    margin-bottom:14px;
     transition:color 0.2s ease;
   }
   .piece-desc{
     color:var(--muted);
     font-size:15px;
-    margin-top:8px;
-    max-width:56ch;
-  }
-  .piece-meta{
-    color:var(--muted);
-    font-size:13px;
-    text-align:right;
+    max-width:42ch;
   }
   .piece:hover .piece-title{color:var(--accent);}
 
   @media (max-width:720px){
-    .piece{grid-template-columns:40px 1fr; grid-template-areas:"num title" ". meta";}
-    .piece-num{grid-area:num;}
-    .piece-title, .piece-desc{grid-area:title;}
-    .piece-meta{grid-area:meta; text-align:left; margin-top:8px;}
+    .writing-grid{grid-template-columns:1fr;}
+    .piece, .piece:nth-child(even){
+      padding:28px 0; margin-top:0 !important; border-left:none;
+    }
   }
 
   /* ---------- Topics as prose ---------- */
@@ -365,9 +399,11 @@
     background:
       linear-gradient(160deg, color-mix(in srgb, var(--accent) 22%, transparent), transparent 60%),
       var(--surface);
-    display:flex;
-    align-items:flex-end;
-    padding:16px;
+    position:relative;
+  }
+  .about-photo-caption{
+    position:absolute;
+    left:16px; bottom:16px;
     color:var(--muted);
     font-size:12px;
   }
@@ -521,7 +557,7 @@
 
   <!-- Hero -->
   <section class="hero wrap">
-    <h1 class="hero-name reveal">Clare</h1>
+    <h1 class="hero-name">Clare</h1>
     <div class="hero-sub">
       <div>
         <p class="hero-role reveal">Writer &amp; Web3 Researcher</p>
@@ -531,54 +567,45 @@
     </div>
   </section>
 
+  <!-- Approach statement -->
+  <section class="wrap approach">
+    <p class="approach-text reveal">Good writing doesn't make complex things sound complicated — it finds the signal, understands the system, and makes the reader want to keep going.</p>
+  </section>
+
   <!-- Selected Writing -->
   <section id="writing" class="wrap">
     <div class="section-head reveal">
       <h2>Selected Writing</h2>
     </div>
 
-    <div class="note">Placeholder pieces below — swap in Clare's real titles, categories, dates and links.</div>
-
-    <div class="writing-list">
-      <a class="piece reveal" href="#">
-        <span class="piece-num">01</span>
-        <span>
-          <div class="piece-title">Why liquidity fragmentation is the real bottleneck for L2s</div>
-          <div class="piece-desc">A look at how cross-rollup liquidity splits are quietly shaping which chains actually retain users.</div>
-        </span>
-        <span class="piece-meta">Research<br>Mar 2026</span>
+    <div class="writing-grid">
+      <a class="piece reveal" href="https://medium.com/@techyclare/paid-finally-92e2cb80fb25" target="_blank" rel="noopener">
+        <span class="piece-num">01 / 04</span>
+        <span class="piece-cat">Essay</span>
+        <span class="piece-date">Sep 2026</span>
+        <div class="piece-title">Paid, Finally</div>
+        <div class="piece-desc">A short story about a freelancer's long, dispiriting job search — and the relief of finally being paid what her work was worth.</div>
       </a>
-      <a class="piece reveal" href="#">
-        <span class="piece-num">02</span>
-        <span>
-          <div class="piece-title">The RWA narrative, one year in</div>
-          <div class="piece-desc">What actually shipped versus what was promised — a sober accounting of real-world-asset protocols.</div>
-        </span>
-        <span class="piece-meta">Analysis<br>Feb 2026</span>
+      <a class="piece reveal" href="https://medium.com/@techyclare/v-boost-explained-the-complete-beginners-guide-to-the-vistory-ecosystem-ef1acbb94214" target="_blank" rel="noopener">
+        <span class="piece-num">02 / 04</span>
+        <span class="piece-cat">Explainer</span>
+        <span class="piece-date">Jun 2026</span>
+        <div class="piece-title">V-Boost Explained</div>
+        <div class="piece-desc">A plain-language walkthrough of a Web3 partner program's token system and matrix mechanics, based on going through onboarding herself.</div>
       </a>
-      <a class="piece reveal" href="#">
-        <span class="piece-num">03</span>
-        <span>
-          <div class="piece-title">Inside a KOL campaign: what the numbers don't show</div>
-          <div class="piece-desc">Reporting from three ambassador programs on what engagement metrics quietly leave out.</div>
-        </span>
-        <span class="piece-meta">Feature<br>Jan 2026</span>
+      <a class="piece reveal" href="https://medium.com/@techyclare/cross-chain-payments-have-had-a-dirty-secret-li-fi-intents-just-exposed-it-f9d043433ffc" target="_blank" rel="noopener">
+        <span class="piece-num">03 / 04</span>
+        <span class="piece-cat">Analysis</span>
+        <span class="piece-date">Jun 2026</span>
+        <div class="piece-title">Cross-Chain Payments Have Had a Dirty Secret</div>
+        <div class="piece-desc">How a new "intent"-based execution model aims to fix the unpredictable, lossy experience of moving crypto across chains.</div>
       </a>
-      <a class="piece reveal" href="#">
-        <span class="piece-num">04</span>
-        <span>
-          <div class="piece-title">On writing for an audience that doesn't trust you yet</div>
-          <div class="piece-desc">Notes on building credibility with a crypto-skeptical reader, one paragraph at a time.</div>
-        </span>
-        <span class="piece-meta">Essay<br>Dec 2025</span>
-      </a>
-      <a class="piece reveal" href="#">
-        <span class="piece-num">05</span>
-        <span>
-          <div class="piece-title">Mapping Africa's stablecoin corridors</div>
-          <div class="piece-desc">A ground-level survey of where cNGN and USDT actually move, and why.</div>
-        </span>
-        <span class="piece-meta">Research<br>Nov 2025</span>
+      <a class="piece reveal" href="https://medium.com/@techyclare/the-bank-of-bitcoin-is-being-built-right-now-most-people-havent-noticed-74d1932bbf4b" target="_blank" rel="noopener">
+        <span class="piece-num">04 / 04</span>
+        <span class="piece-cat">Analysis</span>
+        <span class="piece-date">May 2026</span>
+        <div class="piece-title">The Bank of Bitcoin Is Being Built Right Now</div>
+        <div class="piece-desc">Why most Bitcoin sits idle, and how new non-custodial infrastructure is trying to turn BTC into something people can actually use.</div>
       </a>
     </div>
   </section>
@@ -597,7 +624,7 @@
       <h2>About</h2>
     </div>
     <div class="about-grid reveal">
-      <div class="about-photo">Photo — duotone treatment on upload</div>
+      <div class="about-photo"><span class="about-photo-caption">Clare, writer — photo pending</span></div>
       <div>
         <p class="pull">Start from what's verifiable. Write it plainly. Cut anything that doesn't earn its place.</p>
         <div class="about-copy">
@@ -649,8 +676,8 @@
       <h2>Let's talk about your next piece.</h2>
       <div class="contact-links">
         <a href="mailto:hello@clareonchain.xyz">hello@clareonchain.xyz</a>
+        <a href="https://medium.com/@techyclare" target="_blank" rel="noopener">Medium</a>
         <a href="#">X / Twitter</a>
-        <a href="#">Substack</a>
       </div>
     </div>
   </section>
